@@ -29,13 +29,12 @@ class MarketGenerator(private val shopsPerMarket: Int, private val canGenerateLe
         val actualStock = mutableMapOf<Item, Int>()
 
         for (i in 0..shopType.itemRolls) {
-            val item = possibleStock[rng.nextInt(possibleStock.indices)]
+            var item = possibleStock[rng.nextInt(possibleStock.indices)]
             if (item.name.startsWith("SPC_")) {
-
-            } else {
-                val amount = rng.nextInt(item.indices)
-                actualStock[item] = amount
+                item = item.specialVariants[rng.nextInt(item.specialVariants.indices)]
             }
+            val amount = rng.nextInt(item.indices)
+            actualStock.merge(item, amount, Int::plus)
             if (!item.multiRoll)
                 possibleStock = possibleStock.drop(i)
         }
@@ -54,7 +53,7 @@ class MarketGenerator(private val shopsPerMarket: Int, private val canGenerateLe
     private fun getPossibleShops(regions: List<Region>): MutableList<Shop> {
         val result = mutableListOf<Shop>()
         for (shop in Shop.shopList) {
-            if (regions.any() { it in shop.validRegions }) {
+            if (regions.any { it in shop.validRegions }) {
                 result.add(shop)
             }
         }

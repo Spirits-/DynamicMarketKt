@@ -30,8 +30,9 @@ class ConfigReader(
             """CONFIG LOADED
             REGIONS: ${Region.masterList}
             CONSTANTS:
-                MIN STALLS PER MARKET = $minShops
+                MIN STALLS PER MARKET: $minShops
                 MAX STALLS PER MARKET: $maxShops
+                SPECIAL ITEMS NUMBER: $specialItems
         """.trimMargin()
         )
     }

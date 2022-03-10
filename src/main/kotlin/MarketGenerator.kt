@@ -44,7 +44,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
         if (isSpecial) {
             val specialStockCopy = mutableListOf<Item>()
             shopType.specialStock.forEach { specialStockCopy.add(it) }
-            for (i in 0..specialItems) {
+            for (i in 0 until specialItems) {
                 val item = specialStockCopy[rng.nextInt(specialStockCopy.indices)]
                 val amount = rng.nextInt(item.indices)
                 actualStock.merge(item, amount, Int::plus)

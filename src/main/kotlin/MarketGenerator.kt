@@ -54,7 +54,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
             }
         }
 
-        return Shop.Instance(shopType.name, actualStock)
+        return Shop.Instance(shopType.name, isSpecial, actualStock)
     }
 
     private fun isShopSpecial(shopType: Shop, rng: Random): Boolean {

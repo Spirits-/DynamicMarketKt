@@ -46,9 +46,9 @@ class Shop(
         }
     }
 
-    data class Instance(val name: String, val stock: Map<Item, Int>) {
+    data class Instance(val name: String, val isSpecial: Boolean, val stock: Map<Item, Int>) {
         override fun toString(): String {
-            return """Shop: $name
+            return """Shop: $name SPECIAL: $isSpecial
                 |${stockToString()}
             """.trimMargin()
         }

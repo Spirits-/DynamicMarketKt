@@ -30,7 +30,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
         var possibleStock = getPossibleStock(regions, shopType)
         val actualStock = mutableMapOf<Item, Int>()
 
-        for (i in 0..shopType.itemRolls) {
+        for (i in 0 until shopType.itemRolls) {
             var item = possibleStock[rng.nextInt(possibleStock.indices)]
             if (item.name.startsWith("SPC_")) {
                 item = item.specialVariants[rng.nextInt(item.specialVariants.indices)]

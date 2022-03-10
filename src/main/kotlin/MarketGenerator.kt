@@ -4,16 +4,17 @@ import data.Shop
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class MarketGenerator(private val shopsPerMarket: Int, private val canGenerateLess: Boolean) {
+class MarketGenerator(private val minShops: Int, private val maxShops: Int) {
 
     fun generateMarket(regions: List<Region>): List<Shop.Instance> {
         val market = mutableListOf<Shop.Instance>()
-        val shopNr = if (canGenerateLess) {
-            val rng = Random(System.currentTimeMillis())
-            rng.nextInt(1..shopsPerMarket)
-        } else {
-            shopsPerMarket
-        }
+        val shopNr =
+            if (maxShops == minShops) {
+                minShops
+            } else {
+                val rng = Random(System.currentTimeMillis())
+                rng.nextInt(minShops..maxShops)
+            }
         val possibleShops = getPossibleShops(regions)
 
         for (i in 1..shopNr) {

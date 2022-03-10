@@ -45,17 +45,18 @@ class Shop(
     data class Instance(val name: String, val stock: Map<Item, Int>) {
         override fun toString(): String {
             return """Shop: $name
-                |Stock: ${stockToString()}
+                |${stockToString()}
             """.trimMargin()
         }
 
         private fun stockToString(): String {
             val sb = StringBuilder()
             for (entry in stock.entries) {
+                sb.append("\t")
                 sb.append(entry.key.name)
                 sb.append(" x")
                 sb.append(entry.value)
-                sb.append("; ")
+                sb.append("\n")
             }
             return sb.toString()
         }

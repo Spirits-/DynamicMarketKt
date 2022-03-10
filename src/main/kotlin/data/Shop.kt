@@ -5,7 +5,9 @@ class Shop(
     val globalStock: List<Item>,
     val itemRolls: Int,
     val validRegions: List<Region>,
-    val regionalStock: Map<Region, List<Item>>
+    val regionalStock: Map<Region, List<Item>>,
+    val specialStock: List<Item>,
+    val specialChance: Double
 ) {
 
     companion object {
@@ -17,7 +19,9 @@ class Shop(
         var globalStock: List<Item> = mutableListOf(),
         var itemRolls: Int = -1,
         var validRegions: List<Region> = mutableListOf(),
-        private var regionalStock: MutableMap<Region, List<Item>> = mutableMapOf()
+        private var regionalStock: MutableMap<Region, List<Item>> = mutableMapOf(),
+        var specialStock: List<Item> = mutableListOf(),
+        var specialChance: Double = -1.0
     ) {
 
         init {
@@ -27,10 +31,10 @@ class Shop(
         }
 
         fun build(): Shop {
-            if (name == "" || globalStock.isEmpty() || itemRolls == -1 || validRegions.isEmpty()) throw IllegalArgumentException(
+            if (name == "" || globalStock.isEmpty() || itemRolls == -1 || validRegions.isEmpty() || specialChance == -1.0) throw IllegalArgumentException(
                 "A shop was initialized with incomplete values: $this"
             )
-            return Shop(name, globalStock, itemRolls, validRegions, regionalStock)
+            return Shop(name, globalStock, itemRolls, validRegions, regionalStock, specialStock, specialChance)
         }
 
         fun addRegionalStock(region: Region, items: List<Item>) {

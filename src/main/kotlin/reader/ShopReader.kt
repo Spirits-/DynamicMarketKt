@@ -21,7 +21,9 @@ class ShopReader(private val sheet: XSSFSheet) {
         private const val GLOBAL_STOCK_COL = 1
         private const val VALID_REGIONS_COL = 2
         private const val ITEM_ROLL_COL = 3
-        private const val REGIONS_COL = 4
+        private const val SPECIAL_CHANCE_COL = 4
+        private const val SPECIAL_ITEMS_COL = 5
+        private const val REGIONS_COL = 6
         private val LAST_REGION_COL = REGIONS_COL + Region.masterList.size - 1
         private const val DIVISOR = ";"
     }
@@ -49,6 +51,12 @@ class ShopReader(private val sheet: XSSFSheet) {
                 }
                 ITEM_ROLL_COL -> {
                     shopBuilder.itemRolls = cell.numericCellValue.toInt()
+                }
+                SPECIAL_CHANCE_COL -> {
+                    shopBuilder.specialChance = cell.numericCellValue
+                }
+                SPECIAL_ITEMS_COL -> {
+                    shopBuilder.specialStock = readStockFromCell(cell)
                 }
                 in REGIONS_COL..LAST_REGION_COL -> {
                     val topCell = cell.getTopCell().stringCellValue

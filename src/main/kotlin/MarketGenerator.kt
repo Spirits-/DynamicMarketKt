@@ -4,7 +4,7 @@ import data.Shop
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class MarketGenerator(private val minShops: Int, private val maxShops: Int) {
+class MarketGenerator(private val minShops: Int, private val maxShops: Int, private val specialItems: Int) {
 
     fun generateMarket(regions: List<Region>): List<Shop.Instance> {
         val market = mutableListOf<Shop.Instance>()
@@ -26,6 +26,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int) {
     private fun generateStall(regions: List<Region>, possibleShops: MutableList<Shop>): Shop.Instance {
         val rng = Random(System.currentTimeMillis())
         val shopType = selectShopType(rng, possibleShops)
+        val isSpecial = isShopSpecial(shopType, rng)
         var possibleStock = getPossibleStock(regions, shopType)
         val actualStock = mutableMapOf<Item, Int>()
 
@@ -40,7 +41,28 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int) {
                 possibleStock = possibleStock.drop(i)
         }
 
+        if (isSpecial) {
+            val specialStockCopy = mutableListOf<Item>()
+            shopType.specialStock.forEach { specialStockCopy.add(it) }
+            for (i in 0..specialItems) {
+                val item = specialStockCopy[rng.nextInt(specialStockCopy.indices)]
+                val amount = rng.nextInt(item.indices)
+                actualStock.merge(item, amount, Int::plus)
+                if (!item.multiRoll) {
+                    specialStockCopy.remove(item)
+                }
+            }
+        }
+
         return Shop.Instance(shopType.name, actualStock)
+    }
+
+    private fun isShopSpecial(shopType: Shop, rng: Random): Boolean {
+        if (shopType.specialChance == 0.00) {
+            return false
+        }
+        val roll = rng.nextInt(0..100)
+        return (roll >= shopType.specialChance * 100)
     }
 
     private fun selectShopType(

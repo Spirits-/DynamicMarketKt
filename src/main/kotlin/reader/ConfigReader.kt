@@ -7,16 +7,19 @@ class ConfigReader(
     private val sheet: XSSFSheet,
     private var MAX_SHOPS: Int = -1,
     private var MIN_SHOPS: Int = -1,
+    private var SPECIAL_ITEMS: Int = -1,
 ) {
 
     val maxShops: Int get() = MAX_SHOPS
     val minShops: Int get() = MIN_SHOPS
+    val specialItems: Int get() = SPECIAL_ITEMS
 
     companion object {
         const val SKIP_ROW = 0
         const val VAL_COL = 1
         const val MIN_SHOPS_ROW = 1
         const val MAX_SHOPS_ROW = 2
+        const val SPECIAL_ITEMS_ROW = 3
     }
 
     init {
@@ -42,13 +45,18 @@ class ConfigReader(
                 if (cell.columnIndex == 0) continue
                 else if (cell.columnIndex > VAL_COL) break
 
-                if (row.rowNum == MIN_SHOPS_ROW) {
-                    MIN_SHOPS = cell.numericCellValue.toInt()
-                    break
-                }
-                if (row.rowNum == MAX_SHOPS_ROW) {
-                    MAX_SHOPS = cell.numericCellValue.toInt()
-                    break
+                when (row.rowNum) {
+                    MIN_SHOPS_ROW -> {
+                        MIN_SHOPS = cell.numericCellValue.toInt()
+                        break
+                    }
+                    MAX_SHOPS_ROW -> {
+                        MAX_SHOPS = cell.numericCellValue.toInt()
+                        break
+                    }
+                    SPECIAL_ITEMS_ROW -> {
+                        SPECIAL_ITEMS = cell.numericCellValue.toInt()
+                    }
                 }
             }
         }

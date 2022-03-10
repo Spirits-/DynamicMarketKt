@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
     val cfgReader = ConfigReader(workbook.getSheet("Config"))
     ItemReader(workbook.getSheet("Items"), Item.masterList)
     ShopReader(workbook.getSheet("Shops"))
-    val marketGenerator = MarketGenerator(cfgReader.minShops, cfgReader.maxShops)
+    val marketGenerator = MarketGenerator(cfgReader.minShops, cfgReader.maxShops, cfgReader.specialItems)
 
     val console = BufferedReader(InputStreamReader(System.`in`))
     var choice: Int

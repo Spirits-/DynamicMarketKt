@@ -1,8 +1,20 @@
 package data
 
-data class Item(val name: String, val min: Int, val max: Int, val multiRoll: Boolean, val isSpecial: Boolean = false, val specialVariants: ArrayList<Item>) {
+data class Item(
+    val name: String,
+    val min: Int,
+    val max: Int,
+    val multiRoll: Boolean,
+    val isSpecial: Boolean = false,
+    val specialVariants: ArrayList<Item>
+) {
 
-    val indices = min..max
+    val indices: IntRange
+
+    init {
+        if (min > max || name == "" || min == -1 || max == -1) throw IllegalArgumentException("Item was initialized with illegal values: $this")
+        indices = min..max
+    }
 
     companion object {
         val masterList: MutableList<Item> = mutableListOf()
@@ -17,10 +29,16 @@ data class Item(val name: String, val min: Int, val max: Int, val multiRoll: Boo
         }
     }
 
-    class Builder(var name: String = "", var min: Int = -1, var max: Int = -1, var multiRoll: Boolean = true, var isSpecial: Boolean = false, var specialVariants: ArrayList<Item> = ArrayList()) {
+    class Builder(
+        var name: String = "",
+        var min: Int = -1,
+        var max: Int = -1,
+        var multiRoll: Boolean = true,
+        var isSpecial: Boolean = false,
+        var specialVariants: ArrayList<Item> = ArrayList()
+    ) {
 
         fun build(): Item {
-            if (name == "" || min == -1 || max == -1) throw IllegalArgumentException("An item was initialized with incomplete values: $this")
             return Item(name, min, max, multiRoll, isSpecial, specialVariants)
         }
 

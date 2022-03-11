@@ -60,7 +60,7 @@ class ShopReader(private val sheet: XSSFSheet) {
                 }
                 in REGIONS_COL..LAST_REGION_COL -> {
                     val topCell = cell.getTopCell().stringCellValue
-
+                    if (topCell.isEmpty()) throw java.lang.IllegalStateException("Error while reading regional stock: Region expected! Line ${cell.row} Column ${cell.columnIndex}")
                     val region = Region.getRegionFromMasterList(topCell)
                     shopBuilder.addRegionalStock(region, readStockFromCell(cell))
                 }

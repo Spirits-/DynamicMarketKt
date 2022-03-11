@@ -40,6 +40,7 @@ fun main(args: Array<String>) {
         if (input.isNotEmpty()) {
             choice = input[0].code - ASCII_OFFSET
         } else {
+            println("Please enter a valid input!")
             continue
         }
 

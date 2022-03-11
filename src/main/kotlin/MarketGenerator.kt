@@ -32,7 +32,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
 
         for (i in 0 until shopType.itemRolls) {
             var item = possibleStock[rng.nextInt(possibleStock.indices)]
-            if (item.name.startsWith("SPC_")) {
+            while (item.name.startsWith("SPC_")) {
                 item = item.specialVariants[rng.nextInt(item.specialVariants.indices)]
             }
             val amount = rng.nextInt(item.indices)

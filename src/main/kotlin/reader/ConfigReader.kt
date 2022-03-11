@@ -67,8 +67,11 @@ class ConfigReader(
         val row = sheet.getRow(0)
         for (cell in row) {
             if (cell.columnIndex == SKIP_ROW) continue
-            val region = Region(name = cell.stringCellValue)
-            Region.masterList.add(region)
+            val name = cell.stringCellValue
+            if (name.isNotEmpty()) {
+                val region = Region(name = cell.stringCellValue)
+                Region.masterList.add(region)
+            }
         }
     }
 }

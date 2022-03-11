@@ -26,6 +26,7 @@ fun main(args: Array<String>) {
     val marketGenerator = MarketGenerator(cfgReader.minShops, cfgReader.maxShops, cfgReader.specialItems)
 
     val console = BufferedReader(InputStreamReader(System.`in`))
+    var input: String
     var choice: Int
 
     do {
@@ -35,13 +36,22 @@ fun main(args: Array<String>) {
             1) Generate Market
             Please enter your choice: """.trimMargin()
         )
-        choice = console.readLine()[0].code - ASCII_OFFSET
+        input = console.readLine()
+        if (input.isNotEmpty()) {
+            choice = input[0].code - ASCII_OFFSET
+        } else {
+            continue
+        }
 
         when (choice) {
             0 -> exitProcess(0)
             1 -> {
                 println("Select a region: " + Region.getListNumbers())
-                val input = console.readLine()
+                input = console.readLine()
+                if (input == "") {
+                    println("Please enter a valid value!")
+                    continue
+                }
                 val selectedRegions = readRegions(input)
                 val market = marketGenerator.generateMarket(selectedRegions)
 

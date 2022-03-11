@@ -88,6 +88,7 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
         for (r in regions) {
             shopType.regionalStock[r]?.let { possibleStock.addAll(it) }
         }
+        if (possibleStock.isEmpty()) throw IllegalArgumentException("ERROR: Possible Stock is empty! Regions: $regions, shop type: ${shopType.name}")
         return possibleStock
     }
 }

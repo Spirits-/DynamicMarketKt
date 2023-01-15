@@ -27,18 +27,31 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
         val rng = Random(System.currentTimeMillis())
         val shopType = selectShopType(rng, possibleShops)
         val isSpecial = isShopSpecial(shopType, rng)
-        var possibleStock = getPossibleStock(regions, shopType)
+        val possibleStock = getPossibleStock(regions, shopType)
         val actualStock = mutableMapOf<Item, Int>()
 
         for (i in 0 until shopType.itemRolls) {
-            var item = possibleStock[rng.nextInt(possibleStock.indices)]
-            while (item.name.startsWith("SPC_")) {
-                item = item.specialVariants[rng.nextInt(item.specialVariants.indices)]
+            val roll = rng.nextInt(possibleStock.indices)
+            val item = possibleStock[roll]
+            var specialItem: Item = item
+            while (specialItem.name.startsWith("SPC_")) {
+                val specialRoll = rng.nextInt(specialItem.specialVariants.indices)
+                specialItem = specialItem.specialVariants[specialRoll]
             }
             val amount = rng.nextInt(item.indices)
-            actualStock.merge(item, amount, Int::plus)
-            if (!item.multiRoll)
-                possibleStock = possibleStock.drop(i)
+
+            if (item == specialItem) {
+                actualStock.merge(item, amount, Int::plus)
+            } else {
+                actualStock.merge(specialItem, amount, Int::plus)
+            }
+            if (item == specialItem) {
+                if (!item.multiRoll) {
+                    possibleStock.removeAt(roll)
+                }
+            } else if (!specialItem.multiRoll) {
+                possibleStock.removeAt(roll)
+            }
         }
 
         if (isSpecial) {
@@ -83,10 +96,9 @@ class MarketGenerator(private val minShops: Int, private val maxShops: Int, priv
         return result
     }
 
-    private fun getPossibleStock(regions: List<Region>, shopType: Shop): List<Item> {
+    private fun getPossibleStock(regions: List<Region>, shopType: Shop): MutableList<Item> {
         val possibleStock = ArrayList(shopType.globalStock)
         for (r in regions) {
-            //shopType.regionalStock[r]?.let { possibleStock.addAll(it) }
             possibleStock.addAll(shopType.regionalStock[r]!!)
         }
         if (possibleStock.isEmpty()) throw IllegalArgumentException("ERROR: Possible Stock is empty! Regions: $regions, shop type: ${shopType.name}")
